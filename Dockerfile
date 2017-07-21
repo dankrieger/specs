@@ -1,11 +1,14 @@
-FROM node:6
+FROM node:6-alpine
 
-COPY . /src
+RUN mkdir -p /src
 WORKDIR /src
 
-RUN npm install
-RUN make build
+COPY package.json yarn.lock /src/
+RUN yarn
+COPY . /src
+RUN NODE_ENV=production npm run build
 RUN npm prune --production
+
 
 VOLUME /src
 
